@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
 
 const RepositoryItemCounts = ({ item }) => {
   const parseCount = (count) => {
-    console.log(count);
     if (count<1000) return count;
     return Number.parseFloat(count/1000).toFixed(1).toString() + 'k';
   };

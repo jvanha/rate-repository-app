@@ -3,6 +3,8 @@ import { View, StyleSheet, Button } from 'react-native';
 import FormikTextInput from './FormikTextInput';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import { useSignIn } from '../hooks/useSignIn';
+import { useHistory } from 'react-router-native';
 
 const styles = StyleSheet.create({
   buttonStyle: {
@@ -20,7 +22,7 @@ const validationSchema = yup.object().shape({
     .required('Password is required')
 });
 const SignInForm = ({ onSubmit }) => {
-
+  
   return (
     <View>
       <FormikTextInput 
@@ -40,8 +42,18 @@ const SignInForm = ({ onSubmit }) => {
   );
 };
 const SignIn = () => {
-  const onSubmit = values => {
-    console.log('Signing in', values);
+  const [signIn] = useSignIn();
+  const history = useHistory();
+  
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+    try {
+      const { data } = await signIn({ username, password });
+      history.push('/');
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
   };
   return (
     <Formik 
