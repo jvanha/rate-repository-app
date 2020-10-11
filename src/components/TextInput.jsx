@@ -18,7 +18,7 @@ const TextInput= ({ style, error, ...props}) => {
     styles.textInput,
     style,
   ];
-  return <NativeTextImput style={textInputStyle} {...props} />;
+  return <NativeTextImput style={textInputStyle} {...props}/>;
 };
 
 export default TextInput;

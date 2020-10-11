@@ -18,19 +18,19 @@ const RepositoryItemCounts = ({ item }) => {
   return (
     <View style={styles.flexContainer}>
       <View>
-        <Text fontWeight='bold'>{parseCount(item.stargazersCount)}</Text>
+        <Text fontWeight='bold' testID='stargazerCount'>{parseCount(item.stargazersCount)}</Text>
         <Text color='textSecondary'>Stars</Text>
       </View>
       <View>
-        <Text fontWeight='bold'>{parseCount(item.forksCount)}</Text>
+        <Text fontWeight='bold' testID='forksCount'>{parseCount(item.forksCount)}</Text>
         <Text color='textSecondary'>Forks</Text>
       </View>
       <View>
-        <Text fontWeight='bold'>{parseCount(item.reviewCount)}</Text>
+        <Text fontWeight='bold' testID='reviewCount'>{parseCount(item.reviewCount)}</Text>
         <Text color='textSecondary'>Reviews</Text>
       </View>
       <View>
-        <Text fontWeight='bold'>{parseCount(item.ratingAverage)}</Text>
+        <Text fontWeight='bold' testID='ratingAverage'>{parseCount(item.ratingAverage)}</Text>
         <Text color='textSecondary'>Ratings</Text>
       </View>
     </View>

@@ -5,6 +5,8 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import { useSignIn } from '../hooks/useSignIn';
 import { useHistory } from 'react-router-native';
+import { useMutation } from '@apollo/react-hooks';
+import { CREATE_USER } from '../graphql/mutations';
 
 const styles = StyleSheet.create({
   buttonStyle: {
@@ -19,10 +21,14 @@ const validationSchema = yup.object().shape({
     .required('Username is required'),
   password: yup
     .string()
-    .required('Password is required')
+    .required('Password is required'),
+  passwordConfirmation: yup
+    .string()
+    .oneOf([yup.ref('password'), null], 'Password confirmation failed')
+    .required('Password confirmation is required')
 });
 
-const SignInForm = ({ onSubmit }) => {
+const SignUpForm = ({ onSubmit }) => {
   
   return (
     <View>
@@ -37,6 +43,12 @@ const SignInForm = ({ onSubmit }) => {
         secureTextEntry={true}
         testID='password'
       />
+      <FormikTextInput 
+        name='passwordConfirmation'
+        placeholder='password confirmation'
+        secureTextEntry={true}
+        testID='passwordConfirmation'
+      />
       <View  style={styles.buttonStyle}>
         <Button title='Sign In' onPress={onSubmit} testID='submitButton'/>
       </View>
@@ -45,37 +57,41 @@ const SignInForm = ({ onSubmit }) => {
   );
 };
 
-export const SignInContainer = ({  onSubmit }) => {
+export const SignUpContainer = ({  onSubmit }) => {
   
   return (
     <Formik 
       initialValues={{
         username: '',
         password: '',
+        passwordConfirmation: '',
       }}
       onSubmit={onSubmit}
       validationSchema={validationSchema}
     >
-      {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}    
+      {({ handleSubmit }) => <SignUpForm onSubmit={handleSubmit} />}    
     </Formik>
 
   );
 }; 
-const SignIn = () => {
+const SignUp = () => {
   const [signIn] = useSignIn();
   const history = useHistory();
+  const [mutate] = useMutation(CREATE_USER);
   const onSubmit = async (values) => {
+    console.log('signing up', values);
     const { username, password } = values;
     try {
-      const data = await signIn({ username, password });
+      const data = await mutate({ variables: { username, password } });
+      await signIn({ username, password });
       history.push('/');
       console.log(data);
     } catch (e) {
       console.log(e);
     }
   };
-  return <SignInContainer history={history} signIn={signIn} onSubmit={onSubmit}/>;
+  return <SignUpContainer history={history} signIn={signIn} onSubmit={onSubmit}/>;
 
 };
 
-export default SignIn;
+export default SignUp;

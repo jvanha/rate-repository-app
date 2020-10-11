@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, Button } from 'react-native';
 import Text from './Text';
 import RepositoryItemCounts from './RepositoryItemCounts';
 import theme from '../theme';
+import * as WebBrowser from 'expo-web-browser';
+
 const styles = StyleSheet.create({
   flexContainer: {
     display: 'flex',
@@ -26,9 +28,14 @@ const styles = StyleSheet.create({
     margin: 4,
   }
 });
-const RepositoryItem = ({ item }) => {
+const RepositoryItem = ({ item, showLinkButton }) => {
+  const handleOpen = () => {
+    console.log(item.url);
+    WebBrowser.openBrowserAsync(item.url);
+    
+  };
   return (
-    <View style={{ backgroundColor: 'white' }}>
+    <View testID='repositoryItem' style={{ backgroundColor: 'white' }}>
       <View style={styles.flexContainer}>
         <Image 
           style={styles.avatarImage}
@@ -37,14 +44,15 @@ const RepositoryItem = ({ item }) => {
           }}
         />
         <View style={styles.flexItem}>
-          <Text fontSize='subheading' fontWeight='bold'>{item.fullName}</Text>
-          <Text color='textSecondary'>{item.description}</Text>
+          <Text fontSize='subheading' fontWeight='bold' testID='itemFullName'>{item.fullName}</Text>
+          <Text color='textSecondary' testID='itemDescription'>{item.description}</Text>
           <View style={styles.pill}>
-            <Text color='white'>{item.language}</Text>
+            <Text color='white' testID='itemLanguage'>{item.language}</Text>
           </View>
         </View>
       </View>
       <RepositoryItemCounts item={item} />
+      {showLinkButton && <Button title='Open in GitHub' onPress={handleOpen} testID='submitButton'/>}
     </View>
   );
 };
